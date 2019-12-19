@@ -129,6 +129,10 @@ func ProcessFilesIndividually(wh warehouse.Warehouse, tableColumns []string, fs 
 			defer os.Remove(filename)
 			defer outfile.Close()
 			csvOut := csv.NewWriter(outfile)
+			
+			// write the columns as CSV header
+			csvOut.Write(tableColumns)
+			csvOut.Flush()
 
 			recordCount, err := WriteBundleToCSV(fs, e.ID, tableColumns, csvOut, wh)
 			if err != nil {
@@ -171,6 +175,10 @@ func ProcessFilesByDay(wh warehouse.Warehouse, tableColumns []string, fs *fullst
 	defer os.Remove(filename)
 	defer outfile.Close()
 	csvOut := csv.NewWriter(outfile)
+	
+	// write the columns as CSV header
+	csvOut.Write(tableColumns)
+	csvOut.Flush()
 
 	var processedBundles []fullstory.ExportMeta
 	var totalRecords int
